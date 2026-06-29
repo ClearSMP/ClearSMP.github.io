@@ -1,14 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
+  <meta charset="UTF-8">
+  <title>Turnstile Demo</title>
+
+  <!-- Turnstile -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
-<form action="/verify" method="POST">
-  <div class="cf-turnstile" data-sitekey="0x4AAAAAACmKd9myXlhxcmJT"></div>
-  <button type="submit">Continue</button>
+<h1>お問い合わせ</h1>
+
+<form id="contact-form">
+  <input type="text" name="name" placeholder="名前" required><br><br>
+
+  <input type="email" name="email" placeholder="メールアドレス" required><br><br>
+
+  <textarea name="message" placeholder="内容" required></textarea><br><br>
+
+  <!-- Turnstile -->
+  <div class="cf-turnstile"
+       data-sitekey="0x4AAAAAADsiLQI9USMbMn7b">
+  </div>
+
+  <br>
+  <button type="submit">送信</button>
 </form>
+
+<script>
+document.getElementById("contact-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Turnstileが発行したトークン
+    const token = document.querySelector(
+        'input[name="cf-turnstile-response"]'
+    )?.value;
+
+    if (!token) {
+        alert("CAPTCHAを完了してください。");
+        return;
+    }
+
+    console.log("Turnstile Token:", token);
+
+    // ここでCloudflare Workerなどへ送信して検証
+    alert("送信できます。");
+});
+</script>
 
 </body>
 </html>
